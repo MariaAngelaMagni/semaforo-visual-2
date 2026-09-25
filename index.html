@@ -1,0 +1,494 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Semáforo do Barulho</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: "Arial Rounded MT Bold", Arial, sans-serif;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #dff6ff, #f7e8ff);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: #263238;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 850px;
+        background: rgba(255,255,255,0.95);
+        border-radius: 35px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+
+    h1 {
+        font-size: 2.4rem;
+        margin-bottom: 8px;
+    }
+
+    .subtitulo {
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+    }
+
+    .painel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 35px;
+        flex-wrap: wrap;
+    }
+
+    /* SEMÁFORO */
+
+    .semaforo {
+        background: #263238;
+        padding: 18px;
+        border-radius: 30px;
+        width: 150px;
+        box-shadow: inset 0 0 15px #111,
+                    0 10px 20px rgba(0,0,0,0.25);
+    }
+
+    .luz {
+        width: 100px;
+        height: 100px;
+        margin: 12px auto;
+        border-radius: 50%;
+        opacity: 0.25;
+        transition: 0.3s;
+    }
+
+    .luz.acesa {
+        opacity: 1;
+        transform: scale(1.08);
+        box-shadow: 0 0 30px currentColor;
+    }
+
+    .azul {
+        background: #2196f3;
+        color: #2196f3;
+    }
+
+    .verde {
+        background: #4caf50;
+        color: #4caf50;
+    }
+
+    .amarelo {
+        background: #ffca28;
+        color: #ffca28;
+    }
+
+    .laranja {
+        background: #ff9800;
+        color: #ff9800;
+    }
+
+    .vermelho {
+        background: #f44336;
+        color: #f44336;
+    }
+
+    /* EMOJI */
+
+    .area-status {
+        min-width: 280px;
+    }
+
+    #emoji {
+        font-size: 9rem;
+        transition: 0.3s;
+    }
+
+    #mensagem {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    #nivel {
+        font-size: 1.2rem;
+        margin-top: 8px;
+    }
+
+    /* BARRA */
+
+    .medidor {
+        margin: 30px auto;
+        max-width: 650px;
+    }
+
+    .barra {
+        height: 35px;
+        background: #e0e0e0;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 3px solid white;
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.15);
+    }
+
+    #nivelBarra {
+        width: 0%;
+        height: 100%;
+        border-radius: 20px;
+        transition: width 0.15s, background 0.3s;
+    }
+
+    .escala {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        margin-top: 6px;
+    }
+
+    /* BOTÃO */
+
+    button {
+        border: none;
+        border-radius: 18px;
+        padding: 17px 30px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        cursor: pointer;
+        background: #673ab7;
+        color: white;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        transition: 0.2s;
+    }
+
+    button:hover {
+        transform: scale(1.04);
+    }
+
+    button:active {
+        transform: scale(0.97);
+    }
+
+    #statusMicrofone {
+        margin-top: 15px;
+        font-size: 1rem;
+    }
+
+    .dica {
+        margin-top: 25px;
+        padding: 18px;
+        border-radius: 20px;
+        background: #f3f0ff;
+        font-size: 1rem;
+    }
+
+    /* RESPONSIVO */
+
+    @media (max-width: 600px) {
+
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        #emoji {
+            font-size: 7rem;
+        }
+
+        .semaforo {
+            width: 120px;
+        }
+
+        .luz {
+            width: 75px;
+            height: 75px;
+        }
+
+        #mensagem {
+            font-size: 1.4rem;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🌈 Semáforo do Barulho 🎧</h1>
+
+    <p class="subtitulo">
+        Vamos cuidar juntos do som da nossa sala! 💙
+    </p>
+
+    <div class="painel">
+
+        <!-- SEMÁFORO -->
+        <div class="semaforo">
+
+            <div id="luzAzul" class="luz azul"></div>
+
+            <div id="luzVerde" class="luz verde"></div>
+
+            <div id="luzAmarela" class="luz amarelo"></div>
+
+            <div id="luzLaranja" class="luz laranja"></div>
+
+            <div id="luzVermelha" class="luz vermelho"></div>
+
+        </div>
+
+        <!-- EMOJI E MENSAGEM -->
+        <div class="area-status">
+
+            <div id="emoji">😌</div>
+
+            <div id="mensagem">
+                Ambiente tranquilo
+            </div>
+
+            <div id="nivel">
+                Som: 0
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MEDIDOR -->
+
+    <div class="medidor">
+
+        <div class="barra">
+            <div id="nivelBarra"></div>
+        </div>
+
+        <div class="escala">
+            <span>🤫 Silêncio</span>
+            <span>😊 Tranquilo</span>
+            <span>😐 Atenção</span>
+            <span>😮 Alto</span>
+            <span>🙉 Muito alto</span>
+        </div>
+
+    </div>
+
+    <button id="botao">
+        🎤 ATIVAR MICROFONE
+    </button>
+
+    <div id="statusMicrofone">
+        Microfone desligado
+    </div>
+
+    <div class="dica">
+        💡 <strong>Combinado da turma:</strong><br>
+        Quando o semáforo ficar amarelo ou vermelho,
+        vamos diminuir o volume juntos. 🤝
+    </div>
+
+</div>
+
+
+<script>
+
+let audioContext;
+let analyser;
+let microphone;
+let dados;
+
+const botao = document.getElementById("botao");
+const statusMicrofone = document.getElementById("statusMicrofone");
+
+async function iniciarMicrofone() {
+
+    try {
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true
+        });
+
+        audioContext = new AudioContext();
+
+        analyser = audioContext.createAnalyser();
+
+        analyser.fftSize = 1024;
+
+        microphone = audioContext.createMediaStreamSource(stream);
+
+        microphone.connect(analyser);
+
+        dados = new Uint8Array(analyser.fftSize);
+
+        botao.innerHTML = "🎤 MICROFONE ATIVO";
+
+        statusMicrofone.innerHTML =
+            "🟢 Ouvindo o ambiente...";
+
+        medirSom();
+
+    } catch (erro) {
+
+        statusMicrofone.innerHTML =
+            "⚠️ Não foi possível acessar o microfone.";
+
+        console.error(erro);
+
+    }
+
+}
+
+
+function medirSom() {
+
+    analyser.getByteTimeDomainData(dados);
+
+    let soma = 0;
+
+    for (let i = 0; i < dados.length; i++) {
+
+        let valor = (dados[i] - 128) / 128;
+
+        soma += valor * valor;
+
+    }
+
+    let rms = Math.sqrt(soma / dados.length);
+
+    /*
+       Transformação visual do som.
+
+       Não é uma medição profissional de dB SPL.
+       Os valores abaixo servem para criar
+       uma escala prática para a sala de aula.
+    */
+
+    let intensidade = Math.round(rms * 1000);
+
+    if (intensidade > 100) {
+        intensidade = 100;
+    }
+
+    atualizarSemaforo(intensidade);
+
+    requestAnimationFrame(medirSom);
+
+}
+
+
+function atualizarSemaforo(valor) {
+
+    // Apaga todas as luzes
+
+    document.querySelectorAll(".luz")
+        .forEach(luz => luz.classList.remove("acesa"));
+
+    const emoji = document.getElementById("emoji");
+    const mensagem = document.getElementById("mensagem");
+    const nivel = document.getElementById("nivel");
+    const barra = document.getElementById("nivelBarra");
+
+    barra.style.width = valor + "%";
+
+    nivel.innerHTML =
+        "Nível de som: " + valor + "%";
+
+
+    // 🔵 SILÊNCIO
+
+    if (valor < 15) {
+
+        document.getElementById("luzAzul")
+            .classList.add("acesa");
+
+        emoji.innerHTML = "😌";
+
+        mensagem.innerHTML =
+            "Está bem tranquilo! 🤫";
+
+        barra.style.background = "#2196f3";
+    }
+
+
+    // 🟢 TRANQUILO
+
+    else if (valor < 35) {
+
+        document.getElementById("luzVerde")
+            .classList.add("acesa");
+
+        emoji.innerHTML = "😊";
+
+        mensagem.innerHTML =
+            "Podemos continuar assim! 👍";
+
+        barra.style.background = "#4caf50";
+    }
+
+
+    // 🟡 ATENÇÃO
+
+    else if (valor < 55) {
+
+        document.getElementById("luzAmarela")
+            .classList.add("acesa");
+
+        emoji.innerHTML = "😐";
+
+        mensagem.innerHTML =
+            "Vamos falar um pouquinho mais baixo.";
+
+        barra.style.background = "#ffca28";
+    }
+
+
+    // 🟠 BARULHO ALTO
+
+    else if (valor < 75) {
+
+        document.getElementById("luzLaranja")
+            .classList.add("acesa");
+
+        emoji.innerHTML = "😮";
+
+        mensagem.innerHTML =
+            "Está ficando barulhento!";
+
+        barra.style.background = "#ff9800";
+    }
+
+
+    // 🔴 MUITO BARULHO
+
+    else {
+
+        document.getElementById("luzVermelha")
+            .classList.add("acesa");
+
+        emoji.innerHTML = "🙉";
+
+        mensagem.innerHTML =
+            "Muito barulho! Vamos diminuir juntos.";
+
+        barra.style.background = "#f44336";
+    }
+
+}
+
+
+botao.addEventListener("click", iniciarMicrofone);
+
+</script>
+
+</body>
+</html>
+```
